@@ -45,19 +45,6 @@ public class BeanConfig {
 		return dataSource;
 	}
 	
-	/*<!-- sqlSessionFactory -->
-	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="dataSource" />
-		<property name="configLocation" value="classpath:mybatis-config.xml" />
-		<property name="typeAliasesPackage" value="com.yangfang.entity" />
-		<property name="mapperLocations" value="classpath:mapper/*.xml" />
-	</bean>
-
-	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
-		<property name="basePackage" value="com.yangfang.dao" />
-	</bean>*/
-	
 	@Autowired
 	@Bean
 	public SqlSessionFactoryBean sqlSessionFactoryBean(ComboPooledDataSource dataSource) {
@@ -65,9 +52,7 @@ public class BeanConfig {
 		sqlSessionFactoryBean.setDataSource(dataSource);
 		sqlSessionFactoryBean.setConfigLocation(new ClassPathResource("classpath:mybatis-config.xml"));
 		sqlSessionFactoryBean.setTypeAliasesPackage("com.banana.oa.entity");
-		Resource[] mapperLocations = new Resource[] {new ClassPathResource("classpath:mapper/")};
-		//ClassPathResource[] resources = new ClassPathResource[]{"classpath:mybatis-config.xml",};
-		//sqlSessionFactoryBean.setMapperLocations(new ClassPathResource("classpath:mybatis-config.xml") );
+		Resource[] mapperLocations = new Resource[] {new ClassPathResource("classpath:mapper/*.xml")};
 		sqlSessionFactoryBean.setMapperLocations(mapperLocations);
 		
 		return sqlSessionFactoryBean;
