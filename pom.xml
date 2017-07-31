@@ -15,9 +15,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<!-- Web -->
-		<!-- <jsp.version>2.2</jsp.version>
-		<jstl.version>1.2</jstl.version>
-		<servlet.version>2.5</servlet.version> -->
+		<!-- <jsp.version>2.2</jsp.version> <jstl.version>1.2</jstl.version> <servlet.version>2.5</servlet.version> -->
 
 
 		<!-- Spring -->
@@ -87,16 +85,6 @@
 
 		<!-- Servlet相关依赖 -->
 		<!-- Other Web dependencies -->
-		<!-- <dependency>
-			<groupId>taglibs</groupId>
-			<artifactId>standard</artifactId>
-			<version>1.1.2</version>
-		</dependency>
-		<dependency>
-			<groupId>jstl</groupId>
-			<artifactId>jstl</artifactId>
-			<version>1.2</version>
-		</dependency> -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
@@ -149,5 +137,29 @@
 	</dependencies>
 	<build>
 		<finalName>oa</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
+	<profiles>
+		<profile>
+			<id>jdk-1.8</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+				<jdk>1.8</jdk>
+			</activation>
+			<properties>
+				<maven.compiler.source>1.8</maven.compiler.source>
+				<maven.compiler.target>1.8</maven.compiler.target>
+				<maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
+			</properties>
+		</profile>
+	</profiles>
 </project>
