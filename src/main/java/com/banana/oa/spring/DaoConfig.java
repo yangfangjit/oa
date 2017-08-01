@@ -19,7 +19,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 @Configuration
 @PropertySource("classpath:jdbc.properties")
-public class BeanConfig implements EnvironmentAware {
+public class DaoConfig implements EnvironmentAware {
 
 	private Environment env;
 	
