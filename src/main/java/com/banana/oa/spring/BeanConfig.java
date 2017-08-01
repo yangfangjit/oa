@@ -7,12 +7,11 @@ import org.apache.ibatis.logging.slf4j.Slf4jImpl;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
@@ -31,13 +30,11 @@ public class BeanConfig implements EnvironmentAware {
 		dataSource.setJdbcUrl(env.getProperty("url"));
 		dataSource.setUser(env.getProperty("user"));
 		dataSource.setPassword(env.getProperty("password"));
-		
-		dataSource.setMaxPoolSize(30);
-		dataSource.setMinPoolSize(10);
-		dataSource.setAutoCommitOnClose(false);
-		dataSource.setCheckoutTimeout(1000);
-		dataSource.setAcquireRetryAttempts(2);
-		
+		dataSource.setMaxPoolSize(Integer.parseInt(env.getProperty("maxpoolsize")));
+		dataSource.setMinPoolSize(Integer.parseInt(env.getProperty("minpoolsize")));
+		dataSource.setAutoCommitOnClose(Boolean.parseBoolean(env.getProperty("autocommit")));
+		dataSource.setCheckoutTimeout(Integer.parseInt(env.getProperty("checkouttimeout")));
+		dataSource.setAcquireRetryAttempts(Integer.parseInt(env.getProperty("retryattempts")));
 		return dataSource;
 	}
 	
@@ -47,11 +44,9 @@ public class BeanConfig implements EnvironmentAware {
 		configuration.setUseColumnLabel(true);
 		configuration.setMapUnderscoreToCamelCase(true);
 		configuration.setLogImpl(Slf4jImpl.class);
-		
 		return configuration;
 	}
 	
-	@SuppressWarnings("resource")
 	@Autowired
 	@Bean
 	public SqlSessionFactoryBean sqlSessionFactoryBean(ComboPooledDataSource dataSource) throws IOException {
@@ -59,9 +54,9 @@ public class BeanConfig implements EnvironmentAware {
 		sqlSessionFactoryBean.setDataSource(dataSource);
 		sqlSessionFactoryBean.setConfiguration(mybatisConfiguration());
 		sqlSessionFactoryBean.setTypeAliasesPackage("com.banana.oa.entity");
-		ApplicationContext ctx = new ClassPathXmlApplicationContext();
-		sqlSessionFactoryBean.setMapperLocations(ctx.getResources("mapper/*.xml"));
-		
+		FileSystemXmlApplicationContext ctx = new FileSystemXmlApplicationContext();
+		sqlSessionFactoryBean.setMapperLocations(ctx.getResources("classpath:/mapper/*.xml"));
+		ctx.close();
 		return sqlSessionFactoryBean;
 	}
 	
@@ -69,7 +64,6 @@ public class BeanConfig implements EnvironmentAware {
 	public MapperScannerConfigurer mapperScannerConfigurer() {
 		MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
 		mapperScannerConfigurer.setBasePackage("com.banana.oa.dao");
-		
 		return mapperScannerConfigurer;
 	}
 	
