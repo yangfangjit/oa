@@ -14,10 +14,12 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 @Configuration
+@EnableTransactionManagement
 @PropertySource("classpath:jdbc.properties")
 public class DaoConfig implements EnvironmentAware {
 
@@ -72,7 +74,7 @@ public class DaoConfig implements EnvironmentAware {
 	public DataSourceTransactionManager transactionManager(ComboPooledDataSource dataSource) {
 		return new DataSourceTransactionManager(dataSource);
 	}
-
+	
 	@Override
 	public void setEnvironment(Environment environment) {
 		this.env = environment;
