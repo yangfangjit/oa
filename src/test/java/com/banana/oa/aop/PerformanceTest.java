@@ -1,9 +1,10 @@
-package com.banana.oa.service;
+package com.banana.oa.aop;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.banana.oa.aop.Performance;
+import com.banana.oa.service.BaseTest;
 
 public class PerformanceTest extends BaseTest {
 
